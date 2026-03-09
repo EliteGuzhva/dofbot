@@ -54,7 +54,9 @@ def process_image(msg: Message):
     cv2.waitKey(1)
 
 
-subscriber = Subscriber(host="192.168.4.228")
+# host = "192.168.4.228"
+host = "localhost"
+subscriber = Subscriber(host=host)
 subscriber.subscribe("/image", process_image)
 
 thread = threading.Thread(target=worker)

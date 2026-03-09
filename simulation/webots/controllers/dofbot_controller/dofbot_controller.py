@@ -43,13 +43,15 @@ def angle_rad_to_deg(angle_rad: float) -> float:
 
 def servo_deg_to_joint_rad(joint_id: int, servo_deg: float) -> float:
     sign = JOINT_SIGN_BY_ID.get(joint_id, 1.0)
-    centered_deg = sign * (float(servo_deg) - 90.0)
+    # Webots joint-positive direction is opposite to servo-positive direction
+    # for this DOFBOT model; flip around the 90-degree neutral point.
+    centered_deg = sign * (90.0 - float(servo_deg))
     return angle_deg_to_rad(centered_deg)
 
 
 def joint_rad_to_servo_deg(joint_id: int, joint_rad: float) -> float:
     sign = JOINT_SIGN_BY_ID.get(joint_id, 1.0)
-    centered_deg = sign * angle_rad_to_deg(float(joint_rad))
+    centered_deg = sign * (-angle_rad_to_deg(float(joint_rad)))
     return 90.0 + centered_deg
 
 
@@ -101,7 +103,9 @@ def main() -> int:
 
     while robot.step(timestep) != -1:
         for joint_id, sensor in sensors.items():
-            current_angles[joint_id] = joint_rad_to_servo_deg(joint_id, sensor.getValue())
+            current_angles[joint_id] = joint_rad_to_servo_deg(
+                joint_id, sensor.getValue()
+            )
 
         while True:
             try:
@@ -118,7 +122,9 @@ def main() -> int:
                 joint_id = int(raw["joint_id"])
                 angle = float(raw["angle"])
                 if joint_id in motors:
-                    motors[joint_id].setPosition(servo_deg_to_joint_rad(joint_id, angle))
+                    motors[joint_id].setPosition(
+                        servo_deg_to_joint_rad(joint_id, angle)
+                    )
                 current_angles[joint_id] = angle
                 socket.send_json({"ok": True})
                 continue
@@ -126,11 +132,15 @@ def main() -> int:
             if op == "command_all":
                 angles: List[float] = [float(v) for v in raw["angles"]]
                 if len(angles) != 6:
-                    socket.send_json({"ok": False, "error": "command_all expects 6 values"})
+                    socket.send_json(
+                        {"ok": False, "error": "command_all expects 6 values"}
+                    )
                     continue
                 for joint_id, angle in enumerate(angles, start=1):
                     if joint_id in motors:
-                        motors[joint_id].setPosition(servo_deg_to_joint_rad(joint_id, angle))
+                        motors[joint_id].setPosition(
+                            servo_deg_to_joint_rad(joint_id, angle)
+                        )
                     current_angles[joint_id] = angle
                 socket.send_json({"ok": True})
                 continue

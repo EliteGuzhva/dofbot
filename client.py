@@ -18,8 +18,11 @@ def process_cmd(msg: Message):
         open_gripper=cmd.gripper_open,
     )
 
+
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="DOFBOT camera + command bridge")
+    parser = argparse.ArgumentParser(
+        description="DOFBOT camera + command bridge"
+    )
     parser.add_argument(
         "--backend",
         choices=["hardware", "sim", "webots"],
@@ -31,6 +34,11 @@ def parse_args() -> argparse.Namespace:
         default="tcp://127.0.0.1:5557",
         help="Webots ZMQ endpoint used when --backend webots.",
     )
+    parser.add_argument(
+        "--cmd-host",
+        default="localhost",
+        help="Host to listen for commands on.",
+    )
     parser.add_argument("--camera-index", type=int, default=0)
     return parser.parse_args()
 
@@ -40,7 +48,7 @@ if __name__ == "__main__":
     arm = Arm(backend=args.backend, webots_endpoint=args.webots_endpoint)
     cap = cv2.VideoCapture(args.camera_index)
 
-    subscriber = Subscriber()
+    subscriber = Subscriber(host=args.cmd_host)
     subscriber.subscribe("/cmd", process_cmd)
     subscriber.start()
 
