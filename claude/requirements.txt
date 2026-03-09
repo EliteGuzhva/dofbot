@@ -1,0 +1,18 @@
+# Core — required
+anthropic>=0.40.0        # Claude API client
+opencv-python>=4.5.0     # Camera + image processing
+numpy>=1.19.0            # Array ops
+
+# Servo control — needed on real hardware
+# smbus2>=0.4.0          # I2C for PCA9685 (uncomment on Jetson)
+
+# Optional — better IK
+# roboticstoolbox-python>=1.0.0   # Full DH-based IK solver
+# spatialmath-python>=1.0.0       # SE3 transforms
+
+# Optional — YOLO object detection (instead of color-based)
+# ultralytics>=8.0.0              # YOLOv8 (heavy, but works on Nano with TensorRT)
+
+# Optional — if using adafruit servo library instead of raw PCA9685
+# adafruit-circuitpython-pca9685>=3.4.0
+# adafruit-circuitpython-servokit>=1.3.0

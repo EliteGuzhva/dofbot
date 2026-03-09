@@ -1,0 +1,21 @@
+{
+    "name": "Dofbot",
+    "dockerFile": "Dockerfile",
+    "network": "host",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // C++
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "llvm-vs-code-extensions.vscode-clangd",
+                // Python
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-python.mypy-type-checker"
+            ]
+        }
+    }
+}

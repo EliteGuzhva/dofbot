@@ -1,0 +1,32 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "../protos/Dofbot.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+
+WorldInfo {
+  basicTimeStep 16
+}
+
+Viewpoint {
+  orientation -0.32732846529445564 0.9451296260295054 0.006673878887421329 0.8258402186308609
+  position 0.28830606415800365 -0.4229277628296834 0.3015905633956977
+}
+
+TexturedBackground {
+}
+
+TexturedBackgroundLight {
+}
+
+RectangleArena {
+  floorSize 1 1
+}
+
+Dofbot {
+  translation 0 0 0.08
+  rotation 0 0 1 0
+  controller "dofbot_controller"
+  customData "{\"endpoint\":\"tcp://127.0.0.1:5557\"}"
+}
